@@ -23,16 +23,20 @@ router.get("/api/auth/google/callback",
 
         // Send the tokens in cookies
         res.cookie('accessToken', accessToken, {
-            httpOnly: true, // Not setting httpOnly for less security
-            secure: true, // Not setting Secure for less security
-            sameSite: 'none' // You can adjust this attribute as needed
-        });
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            domain: 'neon-autolib-backend.onrender.com',
+            path: '/'
+          });
 
         res.cookie('refreshToken', refreshToken, {
-            httpOnly: true, // Not setting httpOnly for less security
-            secure: true, // Not setting Secure for less security
-            sameSite: 'none' // You can adjust this attribute as needed
-        });
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            domain: 'neon-autolib-backend.onrender.com',
+            path: '/'
+          });
 
         res.redirect(`${process.env.FRONTEND}`);
     }
@@ -49,10 +53,12 @@ router.post('/api/auth/token', (req, res) => {
         const decoded = jwt.verify(refreshToken, 'YOUR_REFRESH_TOKEN_SECRET');
         const accessToken = generateAccessToken(decoded.user);
         res.cookie('accessToken', accessToken, {
-            httpOnly: true, // Not setting httpOnly for less security
-            secure: true, // Not setting Secure for less security
-            sameSite: 'none' // You can adjust this attribute as needed
-        });
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None',
+            domain: 'neon-autolib-backend.onrender.com',
+            path: '/'
+          });
         res.send({ accessToken });
     } catch (error) {
         res.status(403).send('Invalid Refresh Token');
@@ -92,16 +98,20 @@ router.get("/api/auth/status", verifyToken, (request, response) => {
 
 router.get("/api/auth/logout", (request, response) => {
     response.clearCookie('accessToken', {
-        httpOnly: true, // Not setting httpOnly for less security
-        secure: true, // Not setting Secure for less security
-        sameSite: 'none' // You can adjust this attribute as needed
-    });
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        domain: 'neon-autolib-backend.onrender.com',
+        path: '/'
+      });
 
     response.clearCookie('refreshToken', {
-        httpOnly: true, // Not setting httpOnly for less security
-        secure: true, // Not setting Secure for less security
-        sameSite: 'none' // You can adjust this attribute as needed
-    });
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        domain: 'neon-autolib-backend.onrender.com',
+        path: '/'
+      });
 
     response.redirect(process.env.FRONTEND);
 });

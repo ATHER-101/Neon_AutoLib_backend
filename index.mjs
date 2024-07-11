@@ -19,8 +19,10 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.FRONTEND,
-  credentials: true
+  origin: 'https://autolib.onrender.com',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use((req, res, next) => {
