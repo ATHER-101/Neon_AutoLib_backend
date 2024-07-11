@@ -25,6 +25,11 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+app.options('*', cors({
+  origin: 'https://autolib.onrender.com',
+  credentials: true
+}));
+
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', `${process.env.FRONTEND}`);
   res.header('Access-Control-Allow-Credentials', 'true');
