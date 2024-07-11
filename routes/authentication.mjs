@@ -25,13 +25,13 @@ router.get("/api/auth/google/callback",
         res.cookie('accessToken', accessToken, {
             httpOnly: false, // Not setting httpOnly for less security
             secure: false, // Not setting Secure for less security
-            sameSite: 'Lax' // You can adjust this attribute as needed
+            sameSite: 'None' // You can adjust this attribute as needed
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: false, // Not setting httpOnly for less security
             secure: false, // Not setting Secure for less security
-            sameSite: 'Lax' // You can adjust this attribute as needed
+            sameSite: 'None' // You can adjust this attribute as needed
         });
 
         res.redirect(`${process.env.FRONTEND}`);
@@ -51,7 +51,7 @@ router.post('/api/auth/token', (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: false, // Not setting httpOnly for less security
             secure: false, // Not setting Secure for less security
-            sameSite: 'Lax' // You can adjust this attribute as needed
+            sameSite: 'None' // You can adjust this attribute as needed
         });
         res.send({ accessToken });
     } catch (error) {
@@ -94,13 +94,13 @@ router.get("/api/auth/logout", (request, response) => {
     response.clearCookie('accessToken', {
         httpOnly: false, // Not setting httpOnly for less security
         secure: false, // Not setting Secure for less security
-        sameSite: 'Lax' // You can adjust this attribute as needed
+        sameSite: 'None' // You can adjust this attribute as needed
     });
 
     response.clearCookie('refreshToken', {
         httpOnly: false, // Not setting httpOnly for less security
         secure: false, // Not setting Secure for less security
-        sameSite: 'Lax' // You can adjust this attribute as needed
+        sameSite: 'None' // You can adjust this attribute as needed
     });
 
     response.redirect(process.env.FRONTEND);
