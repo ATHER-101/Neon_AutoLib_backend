@@ -23,6 +23,14 @@ app.use(cors({
   credentials: true
 }));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', `${process.env.FRONTEND}`);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  next();
+});
+
 app.use(passport.initialize());
 
 app.use(books);
