@@ -8,11 +8,11 @@ const router = Router();
 router.get("/api/auth/google", passport.authenticate("google"));
 
 const generateAccessToken = (user) => {
-    return jwt.sign({ user }, 'YOUR_JWT_SECRET', { expiresIn: '30s' });
+    return jwt.sign({ user }, 'YOUR_JWT_SECRET', { expiresIn: '1d' });
 };
 
 const generateRefreshToken = (user) => {
-    return jwt.sign({ user }, 'YOUR_REFRESH_TOKEN_SECRET', { expiresIn: '2m' });
+    return jwt.sign({ user }, 'YOUR_REFRESH_TOKEN_SECRET', { expiresIn: '7d' });
 };
 
 router.get("/api/auth/google/callback",

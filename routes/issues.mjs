@@ -21,6 +21,22 @@ router.get("/api/issues/current-issues", async (request, response) => {
     }
 })
 
+// get users by issued books
+router.get("/api/issues/issue-users", async (request, response) => {
+    const {book_id} =  request.query;
+    const client = await pool.connect();
+    try {
+        const res = await client.query(
+            `SELECT * FROM get_users_by_issued_book($1);`,
+            [book_id]);
+        return response.status(200).send(res.rows);
+    } catch (error) {
+        return response.status(500).send({ error: error.message });
+    } finally {
+        client.release();
+    }
+})
+
 //check issue
 router.get("/api/issues/check-issue", async (request, response) => {
     const { book_id } = request.query;

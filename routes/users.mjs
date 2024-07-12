@@ -3,6 +3,22 @@ import pool from "../db.mjs";
 
 const router = Router();
 
+// get user
+router.get("/api/users", async (request, response) => {
+    const { user_id } = request.query;
+    const client = await pool.connect();
+    try {
+        const res = await client.query(`SELECT * FROM users WHERE id=$1;`, [user_id]);
+
+        return response.status(200).send(res.rows[0]);
+    } catch (error) {
+        return response.status(500).send({ error: error.message });
+    } finally {
+        client.release();
+    }
+})
+    
+
 // get recent genre books
 router.get("/api/users/recent-genres", async (request, response) => {
     const { user_id } = request.query;
