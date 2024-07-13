@@ -9,6 +9,8 @@ import issues from './routes/issues.mjs';
 import bookmarks from './routes/bookmarks.mjs';
 import users from './routes/users.mjs';
 import authentication from './routes/authentication.mjs';
+import otp from './routes/otp.mjs';
+import notifications from './routes/notifications.mjs';
 
 dotenv.config();
 
@@ -32,5 +34,7 @@ app.use(users);
 app.use(issues);
 app.use(bookmarks);
 app.use(authentication);
+app.use(otp);
+app.use(notifications);
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port} !`));

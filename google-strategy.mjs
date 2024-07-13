@@ -22,6 +22,15 @@ passport.use(
             //     return done(null, false);
             // }
 
+            const email = profile.emails[0].value;
+            let role;
+            if (email === 'atharvatijare04@gmail.com') {
+                role = 'admin';
+                return done(null, {email,role});
+            } else {
+                role = 'student';
+            }
+
             const client = await pool.connect();
 
             try {
@@ -36,10 +45,10 @@ passport.use(
                         [profile.id, profile.displayName, profile.emails[0].value]
                     );
                     client.release();
-                    return done(null, newUser.rows[0]);
+                    return done(null, {...newUser.rows[0],role});
                 } else {
                     client.release();
-                    return done(null, findUser.rows[0]);
+                    return done(null, {...findUser.rows[0],role});
                 }
             } catch (error) {
                 client.release();

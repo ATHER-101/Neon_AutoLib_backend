@@ -17,6 +17,26 @@ router.get("/api/users", async (request, response) => {
         client.release();
     }
 })
+
+// search users
+router.get('/api/search-users', async (request, response) => {
+    const { search } = request.query;
+    const { limit } = request.query;
+    const { name } = request.query;
+    const client = await pool.connect();
+    try {
+        const res = await client.query(
+            `SELECT ${name ? `name` : `*`}
+            FROM search_users($1)
+            ${limit ? `LIMIT ${limit}` : ``};`,
+            [search]);
+        return response.status(200).send(res.rows);
+    } catch (error) {
+        return response.status(500).send({ error: error.message });
+    } finally {
+        client.release();
+    }
+});
     
 
 // get recent genre books

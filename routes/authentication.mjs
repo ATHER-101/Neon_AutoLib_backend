@@ -58,11 +58,6 @@ const verifyToken = (req, res, next) => {
 
 router.get("/api/auth/status", verifyToken, (request, response) => {
     if (request.user) {
-        if (request.user.email === 'atharvatijare04@gmail.com') {
-            request.user.role = 'admin';
-        } else {
-            request.user.role = 'student';
-        }
         console.log("User authenticated:", request.user);
         response.send({ status: "authorised", user: request.user });
     } else {
