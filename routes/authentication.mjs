@@ -58,10 +58,10 @@ const verifyToken = (req, res, next) => {
 
 router.get("/api/auth/status", verifyToken, (request, response) => {
     if (request.user) {
-        console.log("User authenticated:", request.user);
+        // console.log("User authenticated:", request.user);
         response.send({ status: "authorised", user: request.user });
     } else {
-        console.log("User not authenticated");
+        // console.log("User not authenticated");
         response.status(401).send({ status: "unauthorised" });
     }
 });

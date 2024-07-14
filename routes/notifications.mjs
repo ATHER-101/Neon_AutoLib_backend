@@ -23,8 +23,6 @@ router.delete("/api/notifications", async (request, response) => {
     const { title } = request.body;
     const { description } = request.body;
 
-    console.log({user_id,title,description});
-
     const client = await pool.connect();
     try {
         await client.query(`DELETE FROM notifications WHERE user_id=$1 AND title=$2 AND description=$3;`, [user_id,title,description]);
