@@ -18,23 +18,23 @@ const transporter = nodemailer.createTransport({
 
 const sendReminderMail = async () => {
     const days_ago = process.env.ISSUE_PERIOD;
-    console.log(days_ago)
+    console.log(days_ago);
     let due_issues;
 
     const client = await pool.connect();
     try {
         const res = await client.query(`SELECT * FROM get_issues_by_days_ago($1);`, [days_ago]);
-
         due_issues = res.rows;
     } catch (error) {
-        return { error };
+        console.error("Database query error:", error);
+        return { error: "Database query failed." };
     } finally {
         client.release();
     }
 
     console.log(due_issues);
 
-    due_issues.forEach((issue) => {
+    const sendMailPromises = due_issues.map(issue => {
         const mailOptions = {
             from: {
                 name: "AutoLib Admin",
@@ -45,8 +45,14 @@ const sendReminderMail = async () => {
             html: mailtemplate(issue),
         };
 
-        transporter.sendMail(mailOptions);
-    })
+        return transporter.sendMail(mailOptions)
+            .catch(error => {
+                console.error(`Failed to send email to ${issue.user_email}:`, error);
+                return { error: `Failed to send email to ${issue.user_email}` };
+            });
+    });
+
+    return Promise.all(sendMailPromises);
 }
 
 export default sendReminderMail;
