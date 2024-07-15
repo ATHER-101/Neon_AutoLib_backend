@@ -3,9 +3,9 @@ import sendReminderMail from "../cron-jobs/reminder-mail.mjs";
 
 const router = Router();
 
-router.get('/api/send-mail', async (request, response) => {
-    // const { user, password } = request.body;
-    // if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {
+router.post('/api/send-mail', async (request, response) => {
+    const { user, password } = request.body;
+    if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {
         try {
             const res = await sendReminderMail();
 
@@ -19,9 +19,9 @@ router.get('/api/send-mail', async (request, response) => {
             console.error("Error in /api/send-mail route:", error);
             response.status(500).send({ message: 'An error occurred while sending emails.', error });
         }
-    // }else{
-    //     response.status(404).send({message:"Not Authorised!"})
-    // }
+    }else{
+        response.status(500).send({message:"Not Authorised!"})
+    }
 });
 
 export default router;
