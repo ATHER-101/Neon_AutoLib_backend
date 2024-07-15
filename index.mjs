@@ -11,6 +11,7 @@ import users from './routes/users.mjs';
 import authentication from './routes/authentication.mjs';
 import otp from './routes/otp.mjs';
 import notifications from './routes/notifications.mjs';
+import cronJobs from './routes/cron-jobs.mjs';
 
 dotenv.config();
 
@@ -36,5 +37,6 @@ app.use(bookmarks);
 app.use(authentication);
 app.use(otp);
 app.use(notifications);
+app.use(cronJobs);
 
 app.listen(port, () => console.log(`Listening on http://localhost:${port} !`));
