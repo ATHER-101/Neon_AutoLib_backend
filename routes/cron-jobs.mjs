@@ -1,8 +1,10 @@
 import { Router } from "express";
 import sendReminderMail from "../cron-jobs/reminder-mail.mjs";
+import cleanDatabase from "../cron-jobs/clean-database.mjs";
 
 const router = Router();
 
+// send mails
 router.post('/api/send-mail', async (request, response) => {
     const { user, password } = request.body;
     if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {
@@ -24,6 +26,23 @@ router.post('/api/send-mail', async (request, response) => {
     }
 });
 
+// clean database
+router.post('/api/clean-db', async (request, response) => {
+    const { user, password } = request.body;
+    if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {
+        const res = await cleanDatabase();
+
+        if (res?.error) {
+            response.status(500).send({ message: res.error });
+        } else {
+            response.status(200).send('DataBase cleaned successfully!');
+        }
+    } else {
+        response.status(500).send({ message: "Not Authorised!" })
+    }
+});
+
+// run render
 router.post('/api/run-render', async (request, response) => {
     const { user, password } = request.body;
     if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {

@@ -18,10 +18,9 @@ const transporter = nodemailer.createTransport({
 
 const sendReminderMail = async () => {
     const days_ago = process.env.ISSUE_PERIOD;
-    console.log(days_ago);
     let due_issues;
 
-    const client = await pool.connect();
+    let client = await pool.connect();
     try {
         const res = await client.query(`SELECT * FROM get_issues_by_days_ago($1);`, [days_ago]);
         due_issues = res.rows;
@@ -32,7 +31,27 @@ const sendReminderMail = async () => {
         client.release();
     }
 
-    console.log(due_issues);
+    client = await pool.connect();
+    try {
+        if (due_issues.length > 0) {
+            const values = [];
+            const queryParts = due_issues.map((issue, index) => {
+                const baseIndex = index * 3 + 1;
+                values.push(issue.user_id, "Return Reminder", `This is a reminder to return the book "${issue.book_title}". It was issued on ${new Date(issue.issue_date).toDateString()} with return on ${new Date().toDateString()}.`);
+                return `($${baseIndex}, $${baseIndex + 1}, $${baseIndex + 2})`;
+            });
+
+            const query = `INSERT INTO notifications(user_id, title, description) VALUES ${queryParts.join(", ")};`;
+            await client.query(query, values);
+        } else {
+            console.log("No due issues to insert.");
+        }
+    } catch (error) {
+        return { error: error.message };
+    } finally {
+        client.release();
+    }
+
 
     const sendMailPromises = due_issues.map(issue => {
         const mailOptions = {
