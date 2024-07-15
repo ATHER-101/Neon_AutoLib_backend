@@ -19,8 +19,17 @@ router.post('/api/send-mail', async (request, response) => {
             console.error("Error in /api/send-mail route:", error);
             response.status(500).send({ message: 'An error occurred while sending emails.', error });
         }
-    }else{
-        response.status(500).send({message:"Not Authorised!"})
+    } else {
+        response.status(500).send({ message: "Not Authorised!" })
+    }
+});
+
+router.post('/api/run-render', async (request, response) => {
+    const { user, password } = request.body;
+    if (user === process.env.CRON_JOB_USER && password === process.env.CRON_JOB_PASSWORD) {
+        response.status(200).send({ message: "Pushing Render!" })
+    } else {
+        response.status(500).send({ message: "Not Authorised!" })
     }
 });
 
